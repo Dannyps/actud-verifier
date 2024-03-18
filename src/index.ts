@@ -8,7 +8,13 @@ window.onload = function () {
   let charBuffer = "";
   document.getElementsByTagName('body')[0].onkeyup = function (e: KeyboardEvent) {
     if (e.key == 'Enter') {
-      console.log(buffer);
+      if (buffer == "") {
+        console.log(charBuffer);
+        charBuffer = "";
+      } else {
+        console.log(buffer);
+        buffer = "";
+      }
       buffer = "";
     } else if (e.code == "AltLeft") {
       buffer += unescape(`&#${charBuffer};`);

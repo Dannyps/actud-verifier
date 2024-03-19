@@ -1,0 +1,11 @@
+# ACTUD Verifier
+
+name open for debate.
+
+## Context
+
+Have you ever found a Portuguese invoice that could not be loaded into the E-Fatura App? Or maybe you're curious about all the information hiding in that cute QR code? This app will help read and reencode the QR Code in Portuguese invoices.
+
+## Contributions
+
+This project is not currently accepting contributions.

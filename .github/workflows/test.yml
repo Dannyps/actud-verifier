@@ -11,7 +11,7 @@ jobs:
         run: npm i
       - name: jest test with Coverage
         continue-on-error: true
-        run: jest --json --outputFile=jest-results.json
+        run: npx jest --json --outputFile=jest-results.json
       - name: Process jest results with default
         if: always()
         # You may also reference just the major or major.minor version

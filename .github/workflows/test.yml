@@ -9,5 +9,14 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install modules
         run: npm i
-      - name: Run tests
-        run: npm test
+      - name: jest test with Coverage
+        continue-on-error: true
+        run: jest --json --outputFile=jest-results.json
+      - name: Process jest results with default
+        if: always()
+        # You may also reference just the major or major.minor version
+        uses: im-open/process-jest-test-results@v2.2.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          create-status-check: true
+          results-file: 'jest-results.json'

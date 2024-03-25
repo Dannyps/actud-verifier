@@ -26,8 +26,8 @@
   "license": "./LICENSE",
   "description": "",
   "dependencies": {
-    "@types/he": "^1.2.3",
-    "he": "^1.2.0",
-    "lodash": "^4.17.21"
+    "@types/mustache": "^4.2.5",
+    "mustache": "^4.2.0",
+    "mustache-loader": "^1.4.3"
   }
 }

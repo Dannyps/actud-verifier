@@ -163,8 +163,12 @@ class ACTUD {
 			} else isMissingARequiredValue = true;
 		});
 
-		if(isMissingARequiredValue)
-		throw new InvalidACTUDError();
+		if (isMissingARequiredValue)
+			throw new InvalidACTUDError();
+
+		let template: (body: any) => string = require('./templates/main.mustache');
+		this.mustacheOutput = template({ actud: this });
+		console.log(this.mustacheOutput);
 	}
 
 	private CheckValue(parameter: keyof ACTUD, value: string, maxLength: number, minLength: number = 0): string {
@@ -173,6 +177,8 @@ class ACTUD {
 		}
 		return value;
 	}
+
+	private mustacheOutput: string;
 }
 
 export { ACTUD };

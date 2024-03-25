@@ -165,10 +165,6 @@ class ACTUD {
 
 		if (isMissingARequiredValue)
 			throw new InvalidACTUDError();
-
-		let template: (body: any) => string = require('./templates/main.mustache');
-		this._mustacheOutput = template({ actud: this });
-		console.log(this.mustacheOutput);
 	}
 
 	private CheckValue(parameter: keyof ACTUD, value: string, maxLength: number, minLength: number = 0): string {
@@ -178,15 +174,6 @@ class ACTUD {
 		return value;
 	}
 
-	private _mustacheOutput: string;
-	
-	public get mustacheOutput(): string {
-		return this._mustacheOutput;
-	}
-
-	private set mustacheOutput(value: string) {
-		this._mustacheOutput = value;
-	}
 }
 
 export { ACTUD };

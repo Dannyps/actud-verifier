@@ -1,5 +1,6 @@
 import './style.css';
 import { ACTUD } from "./ACTUD/ACTUD";
+import { ACTUD2HTML } from './ACTUD/view/ACTUD.view';
 
 "use strict";
 
@@ -12,10 +13,13 @@ let actudWrapper: HTMLDivElement = document.getElementById('actud') as HTMLDivEl
 let currentlyLoadedACTUD: ACTUD = null;
 
 window.onload = function () {
+  
+  let start: number;
+
   inputElement.onkeydown = (e: KeyboardEvent) => {
     let input = inputElement.value;
-    let start: number;
-    if (input.length < 2) {
+    
+    if (input.length < 3) {
       start = Date.now();
     }
 
@@ -23,7 +27,7 @@ window.onload = function () {
     if (e.code == 'Enter') {
       inputElement.value = "";
       currentlyLoadedACTUD = loadQrCode(input, start);
-      actudWrapper.innerHTML = currentlyLoadedACTUD.mustacheOutput;
+      actudWrapper.innerHTML = ACTUD2HTML(currentlyLoadedACTUD);
     }
   };
 };
@@ -31,10 +35,8 @@ window.onload = function () {
 
 function loadQrCode(input: string, start: number): ACTUD {
   try {
-    console.debug(input);
     console.log(`creating ACTUD... Input read in ${Date.now() - start} ms`);
-    const actud = new ACTUD(input);
-    console.info(actud);
+    const actud = new ACTUD(input.trim());
     return actud;
   } catch (e) {
     console.error(e);

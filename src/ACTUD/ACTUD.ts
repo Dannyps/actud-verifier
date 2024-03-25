@@ -138,6 +138,47 @@ class ACTUD {
 		this._ACTUD = this.CheckValue("ACTUD", value, 70);
 	}
 
+	/**
+	 * *Espaço Fiscal*
+	 *  
+	 * max length: **5**
+	 * 
+	 * code: ***I1***
+	 */
+	private _TaxCountryRegion: string;
+	public get TaxCountryRegion(): string {
+		return this._TaxCountryRegion;
+	}
+	public set TaxCountryRegion(value: string) {
+		if (value == '0') {
+			// No caso de documento sem indicação da taxa de IVA, que deva constar na tabela 4.2, 4.3 ou 4.4 do SAF-T(PT), preencher com «0» (I1:0).
+			// TODO: add check for other I* fields.
+			this._TaxCountryRegion = null;
+		} else {
+			this._TaxCountryRegion = value;
+		}
+	}
+
+	/**
+	 * *Base Tributável Isenta de IVA*
+	 * 
+	 * max Length: 16
+	 * 
+	 * code: ***I2***
+	 */
+	private _vatExtemptTaxableBase: number;
+	public get vatExtemptTaxableBase(): number {
+		return this._vatExtemptTaxableBase;
+	}
+	public set vatExtemptTaxableBase(value: string) {
+		let valueFloat = parseFloat(value);
+		if (valueFloat < 0) {
+
+		} else {
+			this._vatExtemptTaxableBase = valueFloat;
+		}
+	}
+
 	constructor(input: string) {
 		let dict: Record<string, string> = {};
 		let isMissingARequiredValue = false;

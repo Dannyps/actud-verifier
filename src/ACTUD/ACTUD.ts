@@ -167,7 +167,7 @@ class ACTUD {
 			throw new InvalidACTUDError();
 
 		let template: (body: any) => string = require('./templates/main.mustache');
-		this.mustacheOutput = template({ actud: this });
+		this._mustacheOutput = template({ actud: this });
 		console.log(this.mustacheOutput);
 	}
 
@@ -178,7 +178,15 @@ class ACTUD {
 		return value;
 	}
 
-	private mustacheOutput: string;
+	private _mustacheOutput: string;
+	
+	public get mustacheOutput(): string {
+		return this._mustacheOutput;
+	}
+
+	private set mustacheOutput(value: string) {
+		this._mustacheOutput = value;
+	}
 }
 
 export { ACTUD };

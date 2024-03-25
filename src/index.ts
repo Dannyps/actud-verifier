@@ -8,7 +8,7 @@ import { ACTUD } from "./ACTUD/ACTUD";
  */
 let readingInputPane: HTMLParagraphElement = document.getElementById('readingInputPane') as HTMLParagraphElement;
 let inputElement: HTMLTextAreaElement = document.getElementById("input") as HTMLTextAreaElement;
-
+let actudWrapper: HTMLDivElement = document.getElementById('actud') as HTMLDivElement;
 let currentlyLoadedACTUD: ACTUD = null;
 
 window.onload = function () {
@@ -23,6 +23,7 @@ window.onload = function () {
     if (e.code == 'Enter') {
       inputElement.value = "";
       currentlyLoadedACTUD = loadQrCode(input, start);
+      actudWrapper.innerHTML = currentlyLoadedACTUD.mustacheOutput;
     }
   };
 };

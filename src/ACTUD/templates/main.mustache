@@ -1,1 +1,42 @@
-Seller is {{ actud.SellerVatNumber }}.
+<table>
+    <thead>
+        <tr>
+            <th>Description</th>
+            <th>Field</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>NIF do Emitente</td>
+            <td>{{actud.SellerVatNumber}}</td>
+        </tr>
+        <tr>
+            <td>NIF do Adquirente</td>
+            <td>{{actud.BuyerVatNumber}}</td>
+        </tr>
+        <tr>
+            <td>País do Adquirente</td>
+            <td>{{actud.BuyerCountry}}</td>
+        </tr>
+        <tr>
+            <td>Tipo de Documento</td>
+            <td>{{actud.InvoiceType}}</td>
+        </tr>
+        <tr>
+            <td>Estado do Documento</td>
+            <td>{{actud.InvoiceStatus}}</td>
+        </tr>
+        <tr>
+            <td>Data do Documento</td>
+            <td>{{actud.InvoiceDate}}</td>
+        </tr>
+        <tr>
+            <td>Identificação Única do Documento</td>
+            <td>{{actud.InvoiceNo}}</td>
+        </tr>
+        <tr>
+            <td>ACTUD</td>
+            <td>{{actud.ACTUD}}</td>
+        </tr>
+    </tbody>
+</table>

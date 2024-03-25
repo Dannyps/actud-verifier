@@ -1,6 +1,7 @@
 import { GetNameFromInvoiceStatus, InvoiceStatus } from "./InvoiceStatusEnum";
 import { GetNameFromInvoiceType, InvoiceType } from "./InvoiceTypesEnum";
 import { InvalidArgumentLengthError } from "./errors/InvalidArgumentLengthError";
+import { InvalidACTUDError } from "./errors/InvalidArgumentLengthError copy";
 
 /**
  * Find docs at {@link https://www.softseguro.pt/Files/ETCODEQR.pdf#page=7}
@@ -161,6 +162,9 @@ class ACTUD {
 				this[requiredKeys[key]] = dict[key];
 			} else isMissingARequiredValue = true;
 		});
+
+		if(isMissingARequiredValue)
+		throw new InvalidACTUDError();
 	}
 
 	private CheckValue(parameter: keyof ACTUD, value: string, maxLength: number, minLength: number = 0): string {

@@ -1,50 +1,40 @@
-import { unescape } from "he";
+import './style.css';
 import { ACTUD } from "./ACTUD/ACTUD";
 
 "use strict";
 
+/**
+ * A panel which can be used to show a message while the code is being read.
+ */
+let readingInputPane: HTMLParagraphElement = document.getElementById('readingInputPane') as HTMLParagraphElement;
+let inputElement: HTMLTextAreaElement = document.getElementById("input") as HTMLTextAreaElement;
+
+let currentlyLoadedACTUD: ACTUD = null;
+
 window.onload = function () {
-  document.getElementsByTagName('body')[0].onkeydown = parseKeyPress;
-  let readingInputPane = document.getElementById('readingInputPane');
-  readingInputPane.style.visibility = 'hidden';
-  
-  let buffer = "";
-  let charBuffer = "";
-  
-  function parseKeyPress(e: KeyboardEvent) {
-    if (e.key == 'Shift') {
-      return;
+  inputElement.onkeydown = (e: KeyboardEvent) => {
+    let input = inputElement.value;
+    let start: number;
+    if (input.length < 2) {
+      start = Date.now();
     }
-  
-    if (e.key == 'Enter') {
-      readingInputPane.style.visibility = 'hidden';
-      if (buffer == "") {
-        console.log(charBuffer);
-        loadQrCode(charBuffer);
-        charBuffer = "";
-      } else {
-        console.log(buffer);
-        loadQrCode(buffer);
-        buffer = "";
-        charBuffer = "";
-        debugger;
-      }
-      buffer = "";
-    } else if (e.code == "AltLeft") {
-      readingInputPane.style.visibility = 'visible';
-      buffer += unescape(`&#${charBuffer};`);
-      charBuffer = "";
-    } else {
-      readingInputPane.style.visibility = 'visible';
-      charBuffer += e.key;
+
+    readingInputPane.style.visibility = "show";
+    if (e.code == 'Enter') {
+      inputElement.value = "";
+      currentlyLoadedACTUD = loadQrCode(input, start);
     }
   };
 };
 
 
-function loadQrCode(input: string): ACTUD {
+function loadQrCode(input: string, start: number): ACTUD {
   try {
-    return new ACTUD(input);
+    console.debug(input);
+    console.log(`creating ACTUD... Input read in ${Date.now() - start} ms`);
+    const actud = new ACTUD(input);
+    console.info(actud);
+    return actud;
   } catch (e) {
     console.error(e);
   }

@@ -1,0 +1,12 @@
+#readingInputPane {
+  visibility: hidden;
+}
+
+.flex-container {
+  display: flex;
+}
+
+.flex-container > div {
+  margin: 10px;
+  padding: 20px;
+}

@@ -1,12 +1,42 @@
+@import "~bootstrap";
+
 #readingInputPane {
   visibility: hidden;
 }
 
 .flex-container {
   display: flex;
+  flex-wrap: wrap;
 }
 
 .flex-container > div {
   margin: 10px;
   padding: 20px;
+}
+
+table {
+  font-family: sans-serif;
+  th,
+  td {
+    padding: 0.25em 0.5em;
+    text-align: left;
+    &:nth-child(2) {
+      text-align: right;
+    }
+  }
+  td {
+    background-color: #eee;
+  }
+  th {
+    background-color: #009;
+    color: #fff;
+  }
+}
+
+.centered {
+  text-align: center;
+}
+
+main {
+  max-width: 100%;
 }

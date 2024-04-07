@@ -28,7 +28,7 @@
         </tr>
         <tr>
             <td>Data do Documento</td>
-            <td>{{actud.InvoiceDate}}</td>
+            <td>{{#formatDate}}{{actud.InvoiceDate}}{{/formatDate}}</td>
         </tr>
         <tr>
             <td>Identificação Única do Documento</td>
@@ -38,5 +38,70 @@
             <td>ACTUD</td>
             <td>{{actud.ACTUD}}</td>
         </tr>
+        <tr>
+            <td>Espaço Fiscal</td>
+            <td>{{actud.TaxCountryRegion}}</td>
+        </tr>
+        <tr>
+            <td>Base Tributável Isenta de IVA</td>
+            <td>{{#formatCurrency}}{{actud.VatExtemptTaxableBase}}{{/formatCurrency}}</td>
+        </tr>
+        <tr>
+            <td>Base Tributável à Taxa Reduzida</td>
+            <td>{{#formatCurrency}}{{actud.Vat1Base}}{{/formatCurrency}}</td>
+        </tr>
+        <tr>
+            <td>Total de IVA à Taxa Reduzida</td>
+            <td>{{#formatCurrency}}{{actud.Vat1}}{{/formatCurrency}}</td>
+        </tr>
+        <tr>
+            <td>Base Tributável à Taxa Intermédia</td>
+            <td>{{#formatCurrency}}{{actud.Vat2Base}}{{/formatCurrency}}</td>
+        </tr>
+        <tr>
+            <td>Total de IVA à Taxa Intermédia</td>
+            <td>{{#formatCurrency}}{{actud.Vat2}}{{/formatCurrency}}</td>
+        </tr>
+        <tr>
+            <td>Base Tributável à Taxa Normal</td>
+            <td>{{#formatCurrency}}{{actud.Vat3Base}}{{/formatCurrency}}</td>
+        </tr>
+        <tr>
+            <td>Total de IVA à Taxa Normal</td>
+            <td>{{#formatCurrency}}{{actud.Vat3}}{{/formatCurrency}}</td>
+        </tr>
+        <tr>
+            <td>Valor não tributável</td>
+            <td>{{#formatCurrency}}{{actud.NotTaxable}}{{/formatCurrency}}</td>
+        </tr>
+        <tr>
+            <td>Imposto do Selo</td>
+            <td>{{#formatCurrency}}{{actud.StampTax}}{{/formatCurrency}}</td>
+        </tr>
+        <tr>
+            <td>Total de Imposto</td>
+            <td>{{#formatCurrency}}{{actud.TaxPayable}}{{/formatCurrency}}</td>
+        </tr>
+        <tr>
+            <td>Total do Documento</td>
+            <td>{{#formatCurrency}}{{actud.GrossTotal}}{{/formatCurrency}}</td>
+        </tr>
+        <tr>
+            <td>Retenções na fonte</td>
+            <td>{{#formatCurrency}}{{actud.WithholdingTaxAmount}}{{/formatCurrency}}</td>
+        </tr>
+        <tr>
+            <td>Hash</td>
+            <td>{{actud.Hash}}</td>
+        </tr>
+        <tr>
+            <td>Número do Certificado</td>
+            <td>{{actud.CertificateNumber}}</td>
+        </tr>
+        <tr>
+            <td>Outras Informações</td>
+            <td>{{actud.Comment}}</td>
+        </tr>
     </tbody>
 </table>
+<p>Input: <code>{{actud.rawInput}}</code></p>

@@ -1,7 +1,8 @@
 import { GetNameFromInvoiceStatus, InvoiceStatus } from "./InvoiceStatusEnum";
 import { GetNameFromInvoiceType, InvoiceType } from "./InvoiceTypesEnum";
 import { InvalidArgumentLengthError } from "./errors/InvalidArgumentLengthError";
-import { InvalidACTUDError } from "./errors/InvalidArgumentLengthError copy";
+import { InvalidACTUDError } from "./errors/InvalidACTUDError";
+import { InvalidArgumentError } from "./errors/InvalidArgumentError";
 
 /**
  * Find docs at {@link https://www.softseguro.pt/Files/ETCODEQR.pdf#page=7}
@@ -166,20 +167,292 @@ class ACTUD {
 	 * 
 	 * code: ***I2***
 	 */
-	private _vatExtemptTaxableBase: number;
-	public get vatExtemptTaxableBase(): number {
-		return this._vatExtemptTaxableBase;
+	private _VatExtemptTaxableBase?: number;
+	public get VatExtemptTaxableBase(): number {
+		return this._VatExtemptTaxableBase ?? 0;
 	}
-	public set vatExtemptTaxableBase(value: string) {
+	public set VatExtemptTaxableBase(value: string) {
 		let valueFloat = parseFloat(value);
 		if (valueFloat < 0) {
-
+			throw new InvalidArgumentError("VatExtemptTaxableBase", "The value must not be negative.");
 		} else {
-			this._vatExtemptTaxableBase = valueFloat;
+			this._VatExtemptTaxableBase = valueFloat;
 		}
 	}
 
-	constructor(input: string) {
+	/**
+	 * *Base Tributável à Taxa Reduzida*
+	 * 
+	 * max Length: 16
+	 * 
+	 * code: ***I3***
+	 */
+	private _Vat1Base?: number;
+	public get Vat1Base(): number {
+		return this._Vat1Base ?? 0;
+	}
+	public set Vat1Base(value: string) {
+		let valueFloat = parseFloat(value);
+		if (valueFloat < 0) {
+			throw new InvalidArgumentError("Vat1Base", "The value must not be negative.");
+		} else {
+			this._Vat1Base = valueFloat;
+		}
+	}
+
+	/**
+	 * *Total de IVA à Taxa Reduzida*
+	 * 
+	 * max Length: 16
+	 * 
+	 * code: ***I4***
+	 */
+	private _Vat1?: number;
+	public get Vat1(): number {
+		return this._Vat1 ?? 0.00;
+	}
+	public set Vat1(value: string) {
+		let valueFloat = parseFloat(value);
+		if (valueFloat < 0) {
+			throw new InvalidArgumentError("Vat1", "The value must not be negative.");
+		} else {
+			this._Vat1 = valueFloat;
+		}
+	}
+
+	/**
+	 * *Base Tributável à Taxa Intermédia*
+	 * 
+	 * max Length: 16
+	 * 
+	 * code: ***I5***
+	 */
+	private _Vat2Base: number;
+	public get Vat2Base(): number {
+		return this._Vat2Base ?? 0.00;
+	}
+	public set Vat2Base(value: string) {
+		let valueFloat = parseFloat(value);
+		if (valueFloat < 0) {
+			throw new InvalidArgumentError("Vat2Base", "The value must not be negative.");
+		} else {
+			this._Vat2Base = valueFloat;
+		}
+	}
+
+	/**
+	 * *Total de IVA à Taxa Intermédia*
+	 * 
+	 * max Length: 16
+	 * 
+	 * code: ***I6***
+	 */
+	private _Vat2: number;
+	public get Vat2(): number {
+		return this._Vat2;
+	}
+	public set Vat2(value: string) {
+		let valueFloat = parseFloat(value);
+		if (valueFloat < 0) {
+			throw new InvalidArgumentError("Vat2", "The value must not be negative.");
+		} else {
+			this._Vat2 = valueFloat;
+		}
+	}
+
+	/**
+	 * *Base Tributável à Taxa Normal*
+	 * 
+	 * max Length: 16
+	 * 
+	 * code: ***I7***
+	 */
+	private _Vat3Base: number;
+	public get Vat3Base(): number {
+		return this._Vat3Base;
+	}
+	public set Vat3Base(value: string) {
+		let valueFloat = parseFloat(value);
+		if (valueFloat < 0) {
+			throw new InvalidArgumentError("Vat3Base", "The value must not be negative.");
+		} else {
+			this._Vat3Base = valueFloat;
+		}
+	}
+
+	/**
+	 * *Total de IVA à Taxa Normal*
+	 * 
+	 * max Length: 16
+	 * 
+	 * code: ***I8***
+	 */
+	private _Vat3: number;
+	public get Vat3(): number {
+		return this._Vat3;
+	}
+	public set Vat3(value: string) {
+		let valueFloat = parseFloat(value);
+		if (valueFloat < 0) {
+			throw new InvalidArgumentError("Vat3", "The value must not be negative.");
+		} else {
+			this._Vat3 = valueFloat;
+		}
+	}
+
+	/**
+	 * *Não sujeito / não tributável em IVA*
+	 * 
+	 * max Length: 16
+	 * 
+	 * code: ***L***
+	 */
+	private _NotTaxable: number;
+	public get NotTaxable(): number {
+		return this._NotTaxable;
+	}
+	public set NotTaxable(value: string) {
+		let valueFloat = parseFloat(value);
+		if (valueFloat < 0) {
+			throw new InvalidArgumentError("NotTaxable", "The value must not be negative.");
+		} else {
+			this._NotTaxable = valueFloat;
+		}
+	}
+
+	/**
+	 * *Imposto do Selo*
+	 * 
+	 * max Length: 16
+	 * 
+	 * code: ***M***
+	 */
+	private _StampTax: number;
+	public get StampTax(): number {
+		return this._StampTax;
+	}
+	public set StampTax(value: string) {
+		let valueFloat = parseFloat(value);
+		if (valueFloat < 0) {
+			throw new InvalidArgumentError("StampTax", "The value must not be negative.");
+		} else {
+			this._StampTax = valueFloat;
+		}
+	}
+
+	/**
+	 * *Total de impostos *
+	 * 
+	 * max Length: 16
+	 * 
+	 * code: ***N***
+	 */
+	private _TaxPayable: number;
+	public get TaxPayable(): number {
+		return this._TaxPayable;
+	}
+	public set TaxPayable(value: string) {
+		let valueFloat = parseFloat(value);
+		if (valueFloat < 0) {
+			throw new InvalidArgumentError("TaxPayable", "The value must not be negative.");
+		} else {
+			this._TaxPayable = valueFloat;
+		}
+	}
+
+	/**
+	 * *Total do documento com impostos *
+	 * 
+	 * max Length: 16
+	 * 
+	 * code: ***O***
+	 */
+	private _GrossTotal: number;
+	public get GrossTotal(): number {
+		return this._GrossTotal;
+	}
+	public set GrossTotal(value: string) {
+		let valueFloat = parseFloat(value);
+		if (valueFloat < 0) {
+			throw new InvalidArgumentError("GrossTotal", "The value must not be negative.");
+		} else {
+			this._GrossTotal = valueFloat;
+		}
+	}
+
+	/**
+	 * *Retenções na fonte *
+	 * 
+	 * max Length: 16
+	 * 
+	 * code: ***P***
+	 */
+	private _WithholdingTaxAmount: number;
+	public get WithholdingTaxAmount(): number {
+		return this._WithholdingTaxAmount;
+	}
+	public set WithholdingTaxAmount(value: string) {
+		let valueFloat = parseFloat(value);
+		if (valueFloat < 0) {
+			throw new InvalidArgumentError("WithholdingTaxAmount", "The value must not be negative.");
+		} else {
+			this._WithholdingTaxAmount = valueFloat;
+		}
+	}
+
+	/**
+	 * *Hash *
+	 * 
+	 * max Length: 4
+	 * 
+	 * code: ***Q***
+	 */
+	private _Hash: string;
+	public get Hash(): string {
+		return this._Hash;
+	}
+	public set Hash(value: string) {
+		this._Hash = this.CheckValue("Hash", value, 4);
+	}
+
+	/**
+	 * *Número do Certificado *
+	 * 
+	 * max Length: 4
+	 * 
+	 * code: ***R***
+	 */
+	private _CertificateNumber: string;
+	public get CertificateNumber(): string {
+		return this._CertificateNumber;
+	}
+	public set CertificateNumber(value: string) {
+		this._CertificateNumber = this.CheckValue("CertificateNumber", value, 4);
+	}
+
+	/**
+	 * *Outras Informações *
+	 * 
+	 * max Length: 65
+	 * 
+	 * code: ***S***
+	 */
+	private _Comment: string;
+	public get Comment(): string {
+		return this._Comment;
+	}
+	public set Comment(value: string) {
+		this._Comment = this.CheckValue("Comment", value, 65);
+	}
+
+	private readonly _rawInput: string;
+	public get rawInput(): string {
+		return this._rawInput;
+	}
+	private set rawInput(_: string) { }
+
+  constructor(input: string) {
+		this._rawInput = input;
 		let dict: Record<string, string> = {};
 		let isMissingARequiredValue = false;
 
@@ -197,6 +470,25 @@ class ACTUD {
 		requiredKeys["F"] = "InvoiceDate";
 		requiredKeys["G"] = "InvoiceNo";
 		requiredKeys["H"] = "ACTUD";
+		requiredKeys["I1"] = "TaxCountryRegion";
+		requiredKeys["N"] = "TaxPayable";
+		requiredKeys["O"] = "GrossTotal";
+
+
+		const optionalKeys: Record<string, keyof ACTUD> = {};
+		optionalKeys["I2"] = "VatExtemptTaxableBase";
+		optionalKeys["I3"] = "Vat1Base";
+		optionalKeys["I4"] = "Vat1";
+		optionalKeys["I5"] = "Vat2Base";
+		optionalKeys["I6"] = "Vat2";
+		optionalKeys["I7"] = "Vat3Base";
+		optionalKeys["I8"] = "Vat3";
+		optionalKeys["L"] = "NotTaxable";
+		optionalKeys["M"] = "StampTax";
+		optionalKeys["P"] = "WithholdingTaxAmount";
+		optionalKeys["Q"] = "Hash";
+		optionalKeys["R"] = "CertificateNumber";
+		optionalKeys["S"] = "Comment";
 
 		Object.keys(requiredKeys).forEach(key => {
 			if (Object.keys(dict).includes(key)) {
@@ -204,8 +496,14 @@ class ACTUD {
 			} else isMissingARequiredValue = true;
 		});
 
+		Object.keys(optionalKeys).forEach(key => {
+			if (Object.keys(dict).includes(key)) {
+				this[optionalKeys[key]] = dict[key];
+			}
+		});
+
 		if (isMissingARequiredValue)
-			throw new InvalidACTUDError();
+			throw new InvalidACTUDError(Object.keys(requiredKeys), Object.keys(dict));
 	}
 
 	private CheckValue(parameter: keyof ACTUD, value: string, maxLength: number, minLength: number = 0): string {

@@ -40,7 +40,8 @@ module.exports = {
   devServer: {
     static: path.resolve(__dirname, 'dist'),
     port: 8080,
-    hot: true
+    hot: true,
+    watchFiles: path.resolve(__dirname, 'src')
   },
   plugins: [
     new HtmlWebpackPlugin({

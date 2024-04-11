@@ -1,8 +1,8 @@
-import { ACTUD } from "../ACTUD";
+import { ACTUDBody } from "../ACTUDBody";
 
 class InvalidArgumentError extends Error {
 
-    constructor(badParameter: keyof ACTUD, message: string) {
+    constructor(badParameter: keyof ACTUDBody, message: string) {
         super(`${badParameter} is not valid: ${message}`);
         this.name = "error.invalidArgument";
     }

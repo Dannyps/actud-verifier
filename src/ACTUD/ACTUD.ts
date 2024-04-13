@@ -10,7 +10,7 @@ import { ACTUDBody } from "./ACTUDBody";
  */
 class ACTUD {
 
-	private _body = new ACTUDBody();
+	private _body: ACTUDBody;
 
 	public get body(): ACTUDBody {
 		return this._body;
@@ -28,6 +28,8 @@ class ACTUD {
 	}
 
 	constructor(input: string, options?: ACTUDOptions) {
+		this._body = new ACTUDBody(options);
+		
 		this._rawInput = input;
 		let dict: Record<string, string> = {};
 		let isMissingARequiredValue = false;

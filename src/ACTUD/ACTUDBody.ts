@@ -2,8 +2,18 @@ import { GetNameFromInvoiceStatus, InvoiceStatus } from "./InvoiceStatusEnum";
 import { GetNameFromInvoiceType, InvoiceType } from "./InvoiceTypesEnum";
 import { InvalidArgumentLengthError } from "./errors/InvalidArgumentLengthError";
 import { InvalidArgumentError } from "./errors/InvalidArgumentError";
+import { validatePortugueseVATNumber } from "./lib/nif";
+import { InvalidArgumentCheckError } from "./errors/InvalidArgumentCheckError";
+import { ACTUDOptions } from "./ACTUD";
 
 export class ACTUDBody {
+
+	private _options?: ACTUDOptions;
+	constructor(options?: ACTUDOptions) {
+		this._options = options;
+
+	}
+
 	/**
 	 * *NIF do Emitente*
 	 * 
@@ -16,7 +26,10 @@ export class ACTUDBody {
 		return this._SellerVatNumber;
 	}
 	public set SellerVatNumber(value: string) {
-		this._SellerVatNumber = this.CheckValue("SellerVatNumber", value, 9);;
+		this._SellerVatNumber = this.CheckValue("SellerVatNumber", value, 9, 9);
+		if (validatePortugueseVATNumber(this._SellerVatNumber) === false && !this._options?.ignoreErrors) {
+			throw new InvalidArgumentCheckError("SellerVatNumber");
+		}
 	}
 
 	/**
@@ -441,7 +454,7 @@ export class ACTUDBody {
 	}
 
 	private CheckValue(parameter: keyof ACTUDBody, value: string, maxLength: number, minLength: number = 0): string {
-		if (value.length > maxLength) {
+		if (value.length > maxLength || value.length < minLength) {
 			throw new InvalidArgumentLengthError(parameter, maxLength, minLength);
 		}
 		return value;

@@ -2,9 +2,10 @@ import { GetNameFromInvoiceStatus, InvoiceStatus } from "./InvoiceStatusEnum";
 import { GetNameFromInvoiceType, InvoiceType } from "./InvoiceTypesEnum";
 import { InvalidArgumentLengthError } from "./errors/InvalidArgumentLengthError";
 import { InvalidArgumentError } from "./errors/InvalidArgumentError";
-import { validatePortugueseVATNumber } from "./lib/nif";
+import { validatePortugueseVATNumber } from "./validators/nif";
 import { InvalidArgumentCheckError } from "./errors/InvalidArgumentCheckError";
 import { ACTUDOptions } from "./ACTUD";
+import { Country, ISO3166 } from "./validators/iso-3166";
 
 export class ACTUDBody {
 
@@ -52,7 +53,7 @@ export class ACTUDBody {
 	 * *País do Adquirente*
 	 * 
 	 * To be filled if known, using the *ISO 3166 — 1-alpha-2* standard.
-	 * Should be filled with "Desconhecido" when the invoice is passed to "Consumidor Final".
+	 * Should be filled with "Desconhecido" when the invoice is passed to "Consumidor Final". This is coded as null.
 	 * 
 	 * See the docs for more info {@link https://files.diariodarepublica.pt/1s/2013/08/16000/0502105047.pdf}
 	 * 
@@ -60,12 +61,18 @@ export class ACTUDBody {
 	 * 
 	 * code: ***C***
 	 */
-	private _BuyerCountry: string;
+	private _BuyerCountry: Country;
 	public get BuyerCountry(): string {
-		return this._BuyerCountry;
+		return this._BuyerCountry.a2;
 	}
 	public set BuyerCountry(value: string) {
-		this._BuyerCountry = this.CheckValue("BuyerCountry", value, 12);
+		if (value.toLocaleLowerCase() == 'Desconhecido'.toLocaleLowerCase()) {
+			this._BuyerCountry = null;
+		} else {
+			this.CheckValue("BuyerCountry", value, 2, 2);
+			const iso3166 = new ISO3166();
+			this._BuyerCountry = iso3166.findCountryByAlpha2Code(value);
+		}
 	}
 
 	/**
@@ -81,7 +88,15 @@ export class ACTUDBody {
 		return GetNameFromInvoiceType(this._InvoiceType);
 	}
 	public set InvoiceType(value: string) {
-		this._InvoiceType = InvoiceType[this.CheckValue("InvoiceType", value, 2, 2) as keyof typeof InvoiceType];
+		if (this.CheckValue("InvoiceType", value, 2, 2) && Object.values(InvoiceType).includes(value)) {
+			this._InvoiceType = InvoiceType[value as keyof typeof InvoiceType];
+		} else {
+			if (this._options.ignoreErrors) {
+				this._InvoiceType = null;
+			} else {
+				throw new InvalidArgumentError("InvoiceType", value);
+			}
+		}
 	}
 
 	/**
@@ -154,9 +169,9 @@ export class ACTUDBody {
 	 * 
 	 * code: ***I1***
 	 */
-	private _TaxCountryRegion: string;
+	private _TaxCountryRegion?: Country;
 	public get TaxCountryRegion(): string {
-		return this._TaxCountryRegion;
+		return this._TaxCountryRegion?.country ?? 'Unknown';
 	}
 	public set TaxCountryRegion(value: string) {
 		if (value == '0') {
@@ -164,7 +179,16 @@ export class ACTUDBody {
 			// TODO: add check for other I* fields.
 			this._TaxCountryRegion = null;
 		} else {
-			this._TaxCountryRegion = value;
+			try {
+				this._TaxCountryRegion = new ISO3166().findCountryByAlpha2Code(value);
+			} catch (error) {
+				if (this._options.ignoreErrors) {
+					this._TaxCountryRegion = null;
+				} else {
+					throw new InvalidArgumentError("TaxCountryRegion", "Invalid country code");
+				}
+			}
+
 		}
 	}
 

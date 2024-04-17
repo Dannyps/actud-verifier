@@ -38,10 +38,38 @@ describe('Invalid B field', () => {
     const t = (bValue: string) => () => new ACTUD(`A:999999990*B:${bValue}*C:PT*D:FT*E:N*F:20201123*G:FAC 1/19*H:0*I1:PT*I7:17.90*I8:4.12*N:4.12*O:22.02*Q:LJT/*R:2648`);
 
     test('field too long leads to a thrown exception', () => {
-        expect(t("456875484651234875936521754678546")).toThrow(new InvalidArgumentLengthError("BuyerVatNumber", 9, 9));
+        expect(t("456875484651234875936521754678546")).toThrow(new InvalidArgumentLengthError("BuyerVatNumber", 30));
+    });
+});
+
+describe('Invalid C field', () => {
+    const t = (cValue: string) => () => new ACTUD(`A:999999990*B:100000061*C:${cValue}*D:FT*E:N*F:20201123*G:FAC 1/19*H:0*I1:PT*I7:17.90*I8:4.12*N:4.12*O:22.02*Q:LJT/*R:2648`);
+
+    test('field too long leads to a thrown exception', () => {
+        expect(t("PRT")).toThrow(new InvalidArgumentLengthError("BuyerCountry", 2, 2));
     });
 
     test('field too short leads to a thrown exception', () => {
-        expect(t("45612378")).toThrow(new InvalidArgumentLengthError("BuyerVatNumber", 9, 9));
+        expect(t("P")).toThrow(new InvalidArgumentLengthError("BuyerCountry", 2, 2));
+    });
+
+    test('invalid field leads to a special thrown exception', () => {
+        expect(t("ZY")).toThrow(new InvalidArgumentCheckError("BuyerCountry"));
+    });
+});
+
+describe('Invalid D field', () => {
+    const t = (dValue: string) => () => new ACTUD(`A:999999990*B:100000061*C:PT*D:${dValue}*E:N*F:20201123*G:FAC 1/19*H:0*I1:PT*I7:17.90*I8:4.12*N:4.12*O:22.02*Q:LJT/*R:2648`);
+
+    test('field too long leads to a thrown exception', () => {
+        expect(t("FTR")).toThrow(new InvalidArgumentLengthError("InvoiceType", 2, 2));
+    });
+
+    test('field too short leads to a thrown exception', () => {
+        expect(t("F")).toThrow(new InvalidArgumentLengthError("InvoiceType", 2, 2));
+    });
+
+    test('invalid field leads to a special thrown exception', () => {
+        expect(t("ZZ")).toThrow(new InvalidArgumentCheckError("InvoiceType"));
     });
 });

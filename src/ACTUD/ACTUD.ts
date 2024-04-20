@@ -1,8 +1,4 @@
-import { GetNameFromInvoiceStatus, InvoiceStatus } from "./InvoiceStatusEnum";
-import { GetNameFromInvoiceType, InvoiceType } from "./InvoiceTypesEnum";
-import { InvalidArgumentLengthError } from "./errors/InvalidArgumentLengthError";
 import { InvalidACTUDError } from "./errors/InvalidACTUDError";
-import { InvalidArgumentError } from "./errors/InvalidArgumentError";
 import { ACTUDBody } from "./ACTUDBody";
 
 /**
@@ -29,7 +25,7 @@ class ACTUD {
 
 	constructor(input: string, options?: ACTUDOptions) {
 		this._body = new ACTUDBody(options);
-		
+
 		this._rawInput = input;
 		let dict: Record<string, string> = {};
 		let isMissingARequiredValue = false;
@@ -82,7 +78,7 @@ class ACTUD {
 
 		if (isMissingARequiredValue) {
 			this._isValid = false;
-			if (!options.ignoreErrors)
+			if (!options?.ignoreErrors)
 				throw new InvalidACTUDError(Object.keys(requiredKeys), Object.keys(dict));
 		}
 		else {

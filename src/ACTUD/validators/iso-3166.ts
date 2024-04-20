@@ -263,14 +263,14 @@ export class ISO3166 {
         if (code.length != 2) {
             throw new Error("Invalid country code length. Must be 2");
         }
-        return this.countries.find(country => country.a2 === code);
+       return this.countries.find(country => country.a2 === code) || (() => { throw new Error("Invalid country code"); })();
     };
 
     public findCountryByAlpha3Code = (code: string): Country => {
         if (code.length != 3) {
             throw new Error("Invalid country code length. Must be 3");
         }
-        return this.countries.find(country => country.a3 === code);
+        return this.countries.find(country => country.a3 === code) || (() => { throw new Error("Invalid country code"); })();
     };
 
 }

@@ -9,3 +9,7 @@ Have you ever found a Portuguese invoice that could not be loaded into the E-Fat
 ## Contributions
 
 This project is not currently accepting contributions.
+
+## ADCTUD Library
+
+It is increasingly obvious that the ACTUD files should be reusable by other projects. However, in line with this code's license, such is not foreseen.

@@ -61,17 +61,21 @@ export class ACTUDBody {
 	 * 
 	 * code: ***C***
 	 */
-	private _BuyerCountry: Country;
+	private _BuyerCountry?: Country;
 	public get BuyerCountry(): string {
-		return this._BuyerCountry.a2;
+		return this._BuyerCountry?.a2 ?? "Desconhecido";
 	}
 	public set BuyerCountry(value: string) {
 		if (value.toLocaleLowerCase() == 'Desconhecido'.toLocaleLowerCase()) {
-			this._BuyerCountry = null;
+			this._BuyerCountry = undefined;
 		} else {
 			this.CheckValue("BuyerCountry", value, 2, 2);
 			const iso3166 = new ISO3166();
-			this._BuyerCountry = iso3166.findCountryByAlpha2Code(value);
+			try {
+				this._BuyerCountry = iso3166.findCountryByAlpha2Code(value);
+			} catch (error) {
+				throw new InvalidArgumentCheckError("BuyerCountry");
+			}
 		}
 	}
 
@@ -82,19 +86,19 @@ export class ACTUDBody {
 	 * 
 	 * code: ***D***
 	 */
-	private _InvoiceType: InvoiceType;
+	private _InvoiceType?: InvoiceType;
 
 	public get InvoiceType(): string {
-		return GetNameFromInvoiceType(this._InvoiceType);
+		return GetNameFromInvoiceType(this._InvoiceType!);
 	}
 	public set InvoiceType(value: string) {
 		if (this.CheckValue("InvoiceType", value, 2, 2) && Object.values(InvoiceType).includes(value)) {
 			this._InvoiceType = InvoiceType[value as keyof typeof InvoiceType];
 		} else {
-			if (this._options.ignoreErrors) {
-				this._InvoiceType = null;
+			if (this._options?.ignoreErrors) {
+				this._InvoiceType = undefined;
 			} else {
-				throw new InvalidArgumentError("InvoiceType", value);
+				throw new InvalidArgumentCheckError("InvoiceType");
 			}
 		}
 	}
@@ -177,13 +181,13 @@ export class ACTUDBody {
 		if (value == '0') {
 			// No caso de documento sem indicação da taxa de IVA, que deva constar na tabela 4.2, 4.3 ou 4.4 do SAF-T(PT), preencher com «0» (I1:0).
 			// TODO: add check for other I* fields.
-			this._TaxCountryRegion = null;
+			this._TaxCountryRegion = undefined;
 		} else {
 			try {
 				this._TaxCountryRegion = new ISO3166().findCountryByAlpha2Code(value);
 			} catch (error) {
-				if (this._options.ignoreErrors) {
-					this._TaxCountryRegion = null;
+				if (this._options?.ignoreErrors) {
+					this._TaxCountryRegion = undefined;
 				} else {
 					throw new InvalidArgumentError("TaxCountryRegion", "Invalid country code");
 				}

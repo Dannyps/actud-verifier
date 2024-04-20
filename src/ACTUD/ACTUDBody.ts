@@ -9,8 +9,8 @@ import { Country, ISO3166 } from "./validators/iso-3166";
 
 export class ACTUDBody {
 
-	private _options?: ACTUDOptions;
-	constructor(options?: ACTUDOptions) {
+	private _options: ACTUDOptions | null;
+	constructor(options: ACTUDOptions | null) {
 		this._options = options;
 
 	}
@@ -61,13 +61,13 @@ export class ACTUDBody {
 	 * 
 	 * code: ***C***
 	 */
-	private _BuyerCountry?: Country;
+	private _BuyerCountry: Country | null;
 	public get BuyerCountry(): string {
 		return this._BuyerCountry?.a2 ?? "Desconhecido";
 	}
 	public set BuyerCountry(value: string) {
 		if (value.toLocaleLowerCase() == 'Desconhecido'.toLocaleLowerCase()) {
-			this._BuyerCountry = undefined;
+			this._BuyerCountry = null;
 		} else {
 			this.CheckValue("BuyerCountry", value, 2, 2);
 			const iso3166 = new ISO3166();
@@ -86,7 +86,7 @@ export class ACTUDBody {
 	 * 
 	 * code: ***D***
 	 */
-	private _InvoiceType?: InvoiceType;
+	private _InvoiceType: InvoiceType | null;
 
 	public get InvoiceType(): string {
 		return GetNameFromInvoiceType(this._InvoiceType!);
@@ -96,7 +96,7 @@ export class ACTUDBody {
 			this._InvoiceType = InvoiceType[value as keyof typeof InvoiceType];
 		} else {
 			if (this._options?.ignoreErrors) {
-				this._InvoiceType = undefined;
+				this._InvoiceType = null;
 			} else {
 				throw new InvalidArgumentCheckError("InvoiceType");
 			}

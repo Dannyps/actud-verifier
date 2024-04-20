@@ -23,7 +23,7 @@ class ACTUD {
 		return this._isValid;
 	}
 
-	constructor(input: string, options?: ACTUDOptions) {
+	constructor(input: string, options: (ACTUDOptions | null) = null) {
 		this._body = new ACTUDBody(options);
 
 		this._rawInput = input;

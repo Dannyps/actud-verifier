@@ -4,7 +4,7 @@ import { ACTUD2HTML } from './ACTUD/view/ACTUD.view';
 import bwipjs from "bwip-js";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '@popperjs/core/dist/cjs/popper.js'
+import '@popperjs/core/dist/cjs/popper.js';
 import 'bootstrap/dist/js/bootstrap.min.js';
 
 "use strict";
@@ -15,7 +15,7 @@ import 'bootstrap/dist/js/bootstrap.min.js';
 let readingInputPane: HTMLParagraphElement = document.getElementById('readingInputPane') as HTMLParagraphElement;
 let inputElement: HTMLTextAreaElement = document.getElementById("input") as HTMLTextAreaElement;
 let actudWrapper: HTMLDivElement = document.getElementById('actud') as HTMLDivElement;
-let currentlyLoadedACTUD: ACTUD = null;
+let currentlyLoadedACTUD: ACTUD | null = null;
 
 window.onload = function () {
 
@@ -41,7 +41,7 @@ window.onload = function () {
     }
 
     readingInputPane.style.visibility = "show";
-    
+
     if (e.code == 'Enter' && input.length > 16) {
       inputElement.value = "";
       currentlyLoadedACTUD = loadQrCode(input, start);
@@ -54,7 +54,7 @@ window.onload = function () {
 };
 
 
-function loadQrCode(input: string, start: number): ACTUD {
+function loadQrCode(input: string, start: number): ACTUD | null {
   try {
     console.log(input);
     const actud = new ACTUD(input.trim(), {
@@ -63,11 +63,12 @@ function loadQrCode(input: string, start: number): ACTUD {
     return actud;
   } catch (e) {
     console.error(e);
+    return null;
   }
 };
 
 function loadSupportQrCodes(codes: string[]) {
-  let qrCodesWrapper = document.getElementById('qrHelpers');
+  let qrCodesWrapper = document.getElementById('qrHelpers')!;
   codes.forEach(code => {
     let destinationCanvasWrapper = document.createElement('div');
     let destinationCanvas = document.createElement('canvas');
@@ -77,7 +78,7 @@ function loadSupportQrCodes(codes: string[]) {
 
     descriptionParagraph.innerText = code;
 
-    bwipjs.toCanvas(destinationCanvas, {text: code, bcid: 'pdf417compact' });
+    bwipjs.toCanvas(destinationCanvas, { text: code, bcid: 'pdf417compact' });
 
     destinationCanvasWrapper.appendChild(destinationCanvas);
     destinationCanvasWrapper.appendChild(descriptionParagraph);

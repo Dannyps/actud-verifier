@@ -255,15 +255,14 @@ export class ISO3166 {
         { country: "Western Sahara*", a2: "EH", a3: "ESH", code: 732 },
         { country: "Yemen", a2: "YE", a3: "YEM", code: 887 },
         { country: "Zambia", a2: "ZM", a3: "ZMB", code: 894 },
-        { country: "Zimbabwe", a2: "ZW", a3: "ZWE", code: 716 },
-        { country: "Åland Islandas", a2: "AX", a3: "ALA", code: 248 }
+        { country: "Zimbabwe", a2: "ZW", a3: "ZWE", code: 716 },        { country: "Åland Islandas", a2: "AX", a3: "ALA", code: 248 }
     ];
 
     public findCountryByAlpha2Code = (code: string): Country => {
         if (code.length != 2) {
             throw new Error("Invalid country code length. Must be 2");
         }
-       return this.countries.find(country => country.a2 === code) || (() => { throw new Error("Invalid country code"); })();
+        return this.countries.find(country => country.a2 === code) || (() => { throw new Error("Invalid country code"); })();
     };
 
     public findCountryByAlpha3Code = (code: string): Country => {

@@ -8,7 +8,7 @@ let eur = new Intl.NumberFormat('en-US', {
 });
 
 
-export function ACTUD2HTML(actud?: ACTUD): string {
+export function ACTUD2HTML(actud: ACTUD | null): string {
     let formatCurrency = function () {
         return function (val: string, render: (template: string) => any) {
             return eur.format(render(val));

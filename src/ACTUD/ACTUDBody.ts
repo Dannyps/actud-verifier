@@ -110,12 +110,20 @@ export class ACTUDBody {
 	 * 
 	 * code: ***E***
 	 */
-	private _InvoiceStatus: InvoiceStatus;
+	private _InvoiceStatus: InvoiceStatus | null;
 	public get InvoiceStatus(): string {
-		return GetNameFromInvoiceStatus(this._InvoiceStatus);
+		return GetNameFromInvoiceStatus(this._InvoiceStatus!);
 	}
 	public set InvoiceStatus(value: string) {
-		this._InvoiceStatus = InvoiceStatus[this.CheckValue("InvoiceStatus", value, 1, 1) as keyof typeof InvoiceStatus];
+		if(this.CheckValue("InvoiceStatus", value, 1, 1) && Object.values(InvoiceStatus).includes(value)) {
+			this._InvoiceStatus = InvoiceStatus[value as keyof typeof InvoiceStatus];
+		} else {
+			if (this._options?.ignoreErrors) {
+				this._InvoiceStatus = null;
+			} else {
+				throw new InvalidArgumentCheckError("InvoiceStatus");
+			}
+		}
 	}
 
 	/**

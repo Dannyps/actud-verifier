@@ -36,6 +36,6 @@
   "dependencies": {
     "@types/bwip-js": "^3.2.3",
     "bootstrap": "^5.3.3",
-    "bwip-js": "^4.3.2"
+    "bwip-js": "^4.5.1"
   }
 }

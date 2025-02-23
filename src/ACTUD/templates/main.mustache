@@ -44,31 +44,31 @@
             <td>{{actud.body.TaxCountryRegion}}</td>
         </tr>
         <tr>
-            <td>Base Tributável Isenta de IVA</td>
+            <td>Base Tributável Isenta de IVA (0%)</td>
             <td>{{#formatCurrency}}{{actud.body.VatExtemptTaxableBase}}{{/formatCurrency}}</td>
         </tr>
         <tr>
-            <td>Base Tributável à Taxa Reduzida</td>
+            <td>Base Tributável à Taxa Reduzida (6%)</td>
             <td>{{#formatCurrency}}{{actud.body.Vat1Base}}{{/formatCurrency}}</td>
         </tr>
         <tr>
-            <td>Total de IVA à Taxa Reduzida</td>
+            <td>Total de IVA à Taxa Reduzida (6%)</td>
             <td>{{#formatCurrency}}{{actud.body.Vat1}}{{/formatCurrency}}</td>
         </tr>
         <tr>
-            <td>Base Tributável à Taxa Intermédia</td>
+            <td>Base Tributável à Taxa Intermédia (13%)</td>
             <td>{{#formatCurrency}}{{actud.body.Vat2Base}}{{/formatCurrency}}</td>
         </tr>
         <tr>
-            <td>Total de IVA à Taxa Intermédia</td>
+            <td>Total de IVA à Taxa Intermédia (13%)</td>
             <td>{{#formatCurrency}}{{actud.body.Vat2}}{{/formatCurrency}}</td>
         </tr>
         <tr>
-            <td>Base Tributável à Taxa Normal</td>
+            <td>Base Tributável à Taxa Normal (23%)</td>
             <td>{{#formatCurrency}}{{actud.body.Vat3Base}}{{/formatCurrency}}</td>
         </tr>
         <tr>
-            <td>Total de IVA à Taxa Normal</td>
+            <td>Total de IVA à Taxa Normal (23%)</td>
             <td>{{#formatCurrency}}{{actud.body.Vat3}}{{/formatCurrency}}</td>
         </tr>
         <tr>
@@ -110,3 +110,4 @@
 <p>Not valid</p>
 {{/isValid}}
 <p>Input: <code>{{actud.rawInput}}</code></p>
+<p>Regenerated Input: <code>{{actud.regeneratedInput}}</code></p>

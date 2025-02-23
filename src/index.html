@@ -17,18 +17,21 @@
     <section class="jumbotron">
       <div class="flex-container">
         <div>
-          <p id="readingInputPane">Reading input... Please press <code>ENTER</code> when finished.</p>
-          <textarea id="input" placeholder="insert ACTUD here" cols="60" rows="4" autofocus></textarea>
-          <br />
+          <button id="serialPortActivator" type="button">Use Serial Port</button>
           <button type="button" data-bs-toggle="collapse" data-bs-target="#qrHelpers">
             Toggle Setup Codes
           </button>
           <div id="qrHelpers" class="collapse flex-container"></div>
         </div>
-        <div id="actud"></div>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr);">
+          <div id="actud"></div>
+          <div id="new-actud"></div>
+          <div id="new-actud-qr"></div>
+        </div>
       </div>
     </section>
   </main>
+  <div id="error-wrapper"></div>
 </body>
 
 </html>

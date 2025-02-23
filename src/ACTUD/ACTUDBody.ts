@@ -91,6 +91,9 @@ export class ACTUDBody {
 	public get InvoiceType(): string {
 		return GetNameFromInvoiceType(this._InvoiceType!);
 	}
+	public get InvoiceTypeCode(): string {
+		return InvoiceType[this._InvoiceType!];
+	}
 	public set InvoiceType(value: string) {
 		if (this.CheckValue("InvoiceType", value, 2, 2) && Object.values(InvoiceType).includes(value)) {
 			this._InvoiceType = InvoiceType[value as keyof typeof InvoiceType];
@@ -114,8 +117,11 @@ export class ACTUDBody {
 	public get InvoiceStatus(): string {
 		return GetNameFromInvoiceStatus(this._InvoiceStatus!);
 	}
+	public get InvoiceStatusCode(): string {
+		return InvoiceStatus[this._InvoiceStatus!];
+	}
 	public set InvoiceStatus(value: string) {
-		if(this.CheckValue("InvoiceStatus", value, 1, 1) && Object.values(InvoiceStatus).includes(value)) {
+		if (this.CheckValue("InvoiceStatus", value, 1, 1) && Object.values(InvoiceStatus).includes(value)) {
 			this._InvoiceStatus = InvoiceStatus[value as keyof typeof InvoiceStatus];
 		} else {
 			if (this._options?.ignoreErrors) {
@@ -184,6 +190,9 @@ export class ACTUDBody {
 	private _TaxCountryRegion?: Country;
 	public get TaxCountryRegion(): string {
 		return this._TaxCountryRegion?.country ?? 'Unknown';
+	}
+	public get TaxCountryRegionCode(): string | undefined {
+		return this._TaxCountryRegion?.a2;
 	}
 	public set TaxCountryRegion(value: string) {
 		if (value == '0') {

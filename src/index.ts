@@ -2,22 +2,24 @@ import './style.css';
 import { ACTUD } from "./ACTUD/ACTUD";
 import { ACTUD2HTML } from './ACTUD/view/ACTUD.view';
 import bwipjs from "bwip-js";
-
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@popperjs/core/dist/cjs/popper.js';
 import 'bootstrap/dist/js/bootstrap.min.js';
+import { LineBreakTransformer } from './ACTUD/LineBreakTransformer';
 
 "use strict";
 
 /**
  * A panel which can be used to show a message while the code is being read.
  */
-let readingInputPane: HTMLParagraphElement = document.getElementById('readingInputPane') as HTMLParagraphElement;
-let inputElement: HTMLTextAreaElement = document.getElementById("input") as HTMLTextAreaElement;
-let actudWrapper: HTMLDivElement = document.getElementById('actud') as HTMLDivElement;
+let actudWrapper = document.getElementById('actud') as HTMLDivElement;
+let newActudWrapper = document.getElementById('new-actud') as HTMLDivElement;
+let newActudQRWrapper = document.getElementById('new-actud-qr') as HTMLDivElement;
+let errorWrapper = document.getElementById('error-wrapper') as HTMLDivElement;
+let useSerialPortButton = document.getElementById("serialPortActivator") as HTMLButtonElement;
 let currentlyLoadedACTUD: ACTUD | null = null;
 
-window.onload = function () {
+window.onload = async function () {
 
   let start: number;
   loadSupportQrCodes([
@@ -32,39 +34,84 @@ window.onload = function () {
     '%%ALLTIM05',
     '%%ALLTIM06']);
 
-  inputElement.onkeydown = (e: KeyboardEvent) => {
-    inputElement.value = inputElement.value.trim();
-    let input = inputElement.value;
+  navigator.serial.addEventListener("connect", (event) => {
+    useSerialPortButton.disabled = false;
+  });
 
-    if (input.length < 3) {
-      start = Date.now();
-    }
+  navigator.serial.addEventListener("disconnect", (event) => {
+    useSerialPortButton.disabled = true;
+  });
 
-    readingInputPane.style.visibility = "show";
+  useSerialPortButton.disabled = (await navigator.serial.getPorts()).length === 0;
 
-    if (e.code == 'Enter' && input.length > 16) {
-      inputElement.value = "";
-      currentlyLoadedACTUD = loadQrCode(input, start);
-      actudWrapper.innerHTML = ACTUD2HTML(currentlyLoadedACTUD);
-    }
-  };
+  useSerialPortButton.onclick = (async _ => {
+    if ("serial" in navigator) {
+      console.log("The Web Serial API is supported.");
+      const port = await navigator.serial.requestPort();
 
-  actudWrapper.innerHTML = ACTUD2HTML(loadQrCode("A:506810267*B:103904638*C:PT*D:FT*E:N*F:20240206*G:FTR 0100324/14570*H:JJJCR94W-14570*I1:PT*I3:7.15*I4:0.43*N:0.43*O:7.58*Q:o8NL*R:2000", Date.now()));
-  // A:504661264*B:262131323*C:PT*D:FS*E:N*F:20240323*G:FS990/156201*H:JFBNXNVT-156201*I1:PT*I5:5.37*I6:0.70*I7:1.15*I8:0.27*N:0.97*O:7.49*Q:hmwH*R:71
+
+      try {
+        await port.open({ baudRate: 9600 });
+      } catch (error) {
+        alert("Could not open the selected serial port. Maybe it is already in use. See the console for more information.");
+        console.error(error);
+        return;
+      }
+      try {
+
+        const textDecoder = new TextDecoderStream();
+        port.readable.pipeTo(textDecoder.writable);
+        const reader = textDecoder.readable.pipeThrough(new TransformStream(new LineBreakTransformer())).getReader();
+        // Listen to data coming from the serial device.
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) {
+            // Allow the serial port to be closed later.
+            reader.releaseLock();
+            break;
+          }
+          try {
+
+            let actud = loadQrCode(value, Date.now());
+            actudWrapper.innerHTML = ACTUD2HTML(actud);
+
+            if (actud && actud.body.BuyerVatNumber == undefined || actud?.body.BuyerVatNumber == "") {
+              actud.body.BuyerVatNumber = "999999990";
+            }
+            if (actud && actud.body.Vat3 == undefined || actud?.body.Vat3 == 0) {
+              actud.body.Vat3 = actud.body.TaxPayable.toString();
+            }
+
+            actud!.regenerateRaw();
+            newActudWrapper.innerHTML = ACTUD2HTML(actud);
+
+            let destinationCanvasWrapper = document.createElement('div');
+            let destinationCanvas = document.createElement('canvas');
+            bwipjs.toCanvas(destinationCanvas, { text: actud!.regeneratedInput, bcid: 'qrcode' });
+            destinationCanvasWrapper.appendChild(destinationCanvas);
+            newActudQRWrapper.textContent = '';
+            newActudQRWrapper.appendChild(destinationCanvasWrapper);
+          } catch (error) {
+            errorWrapper.appendChild(document.createElement('p')).innerText = error.message;
+            errorWrapper.appendChild(document.createElement('p')).innerHTML = `<pre>${value}</pre>`;
+          }
+        }
+      } catch (error) {
+        console.error(error);
+      }
+
+
+    } else console.warn("The Web Serial API is not supported.");
+  });
 };
 
 
 function loadQrCode(input: string, start: number): ACTUD | null {
-  try {
-    console.log(input);
-    const actud = new ACTUD(input.trim(), {
-      ignoreErrors: true
-    });
-    return actud;
-  } catch (e) {
-    console.error(e);
-    return null;
-  }
+  input = input.replace("\x00", "");
+  const actud = new ACTUD(input.trim(), {
+    ignoreErrors: false
+  });
+  return actud;
 };
 
 function loadSupportQrCodes(codes: string[]) {
@@ -86,3 +133,4 @@ function loadSupportQrCodes(codes: string[]) {
     qrCodesWrapper.appendChild(destinationCanvasWrapper);
   });
 }
+

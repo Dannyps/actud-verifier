@@ -3,6 +3,7 @@
     "@babel/preset-typescript": "^7.26.0",
     "@popperjs/core": "^2.11.8",
     "@types/bootstrap": "^5.2.10",
+    "@types/dom-serial": "^1.0.6",
     "@types/jest": "^29.5.14",
     "@types/jquery": "^3.5.32",
     "@types/lodash": "^4.17.15",
@@ -26,6 +27,7 @@
   "scripts": {
     "build": "webpack",
     "watch": "webpack --watch",
+    "serve": "webpack serve",
     "test": "jest"
   },
   "keywords": [],

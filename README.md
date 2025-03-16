@@ -20,7 +20,7 @@ To start the tool, run:
 
 ```bash
 npm i
-npm run wserveatch
+npm run watch
 ```
 
 Changes done to the code are reloaded live. The tool is loaded on http://localhost:8080

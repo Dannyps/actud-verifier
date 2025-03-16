@@ -17,11 +17,9 @@ let newActudWrapper = document.getElementById('new-actud') as HTMLDivElement;
 let newActudQRWrapper = document.getElementById('new-actud-qr') as HTMLDivElement;
 let errorWrapper = document.getElementById('error-wrapper') as HTMLDivElement;
 let useSerialPortButton = document.getElementById("serialPortActivator") as HTMLButtonElement;
-let currentlyLoadedACTUD: ACTUD | null = null;
 
 window.onload = async function () {
 
-  let start: number;
   loadSupportQrCodes([
     '%%Batt',
     '%%Restore',
@@ -34,15 +32,29 @@ window.onload = async function () {
     '%%ALLTIM05',
     '%%ALLTIM06']);
 
-  navigator.serial.addEventListener("connect", (event) => {
-    useSerialPortButton.disabled = false;
-  });
+  if ("serial" in navigator) {
 
-  navigator.serial.addEventListener("disconnect", (event) => {
+    navigator.serial.addEventListener("connect", (event) => {
+      useSerialPortButton.disabled = false;
+    });
+
+    navigator.serial.addEventListener("disconnect", (event) => {
+      useSerialPortButton.disabled = true;
+    });
+
+    let noSerialPortsFound = (await navigator.serial.getPorts()).length === 0;
+    if (noSerialPortsFound) {
+      alert("No serial ports found. Please connect a serial device and try again.");
+      useSerialPortButton.disabled = noSerialPortsFound;
+    }else{
+      useSerialPortButton.disabled = false;
+    }
+
+  } else {
     useSerialPortButton.disabled = true;
-  });
+    alert("Serial port is not supported in this browser or you're not accessing this app in a secure context (either localhost or HTTPS).");
+  }
 
-  useSerialPortButton.disabled = (await navigator.serial.getPorts()).length === 0;
 
   useSerialPortButton.onclick = (async _ => {
     if ("serial" in navigator) {

@@ -42,13 +42,8 @@ window.onload = async function () {
       useSerialPortButton.disabled = true;
     });
 
-    let noSerialPortsFound = (await navigator.serial.getPorts()).length === 0;
-    if (noSerialPortsFound) {
-      alert("No serial ports found. Please connect a serial device and try again.");
-      useSerialPortButton.disabled = noSerialPortsFound;
-    }else{
-      useSerialPortButton.disabled = false;
-    }
+    useSerialPortButton.disabled = false;
+    
 
   } else {
     useSerialPortButton.disabled = true;

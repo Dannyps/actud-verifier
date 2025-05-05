@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "@babel/preset-typescript": "^7.27.0",
+    "@babel/preset-typescript": "^7.27.1",
     "@popperjs/core": "^2.11.8",
     "@types/bootstrap": "^5.2.10",
     "@types/dom-serial": "^1.0.6",

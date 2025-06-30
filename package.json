@@ -6,7 +6,7 @@
     "@types/dom-serial": "^1.0.6",
     "@types/jest": "^29.5.14",
     "@types/jquery": "^3.5.32",
-    "@types/lodash": "^4.17.18",
+    "@types/lodash": "^4.17.19",
     "@types/mustache": "^4.2.6",
     "@types/qrcode": "^1.5.5",
     "css-loader": "^7.1.2",

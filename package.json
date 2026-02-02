@@ -6,11 +6,11 @@
     "@types/dom-serial": "^1.0.6",
     "@types/jest": "^30.0.0",
     "@types/jquery": "^3.5.33",
-    "@types/lodash": "^4.17.21",
+    "@types/lodash": "^4.17.23",
     "@types/mustache": "^4.2.6",
     "@types/qrcode": "^1.5.6",
-    "css-loader": "^7.1.2",
-    "html-webpack-plugin": "^5.6.5",
+    "css-loader": "^7.1.3",
+    "html-webpack-plugin": "^5.6.6",
     "jest": "^30.2.0",
     "mustache": "^4.2.0",
     "raw-loader": "^4.0.2",
@@ -20,7 +20,7 @@
     "typescript": "^5.9.3",
     "webpack": "^5.104.1",
     "webpack-cli": "^6.0.1",
-    "webpack-dev-server": "^5.2.2"
+    "webpack-dev-server": "^5.2.3"
   },
   "name": "actud-verifier",
   "version": "1.0.0",
